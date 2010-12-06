@@ -1,11 +1,13 @@
 #summary One-sentence summary of this page.
 #labels Featured,Phase-Design,Phase-Implementation
 
-= Introduction =
+= Auto Office Framework =
+
+== Introduction ==
 
 Auto Office Frmaevork is framework for automating functions of MS Office applications. It works via Component Object Model, and via COM interfaces interacts with MS Office Functions. First realease version supports large scale of MS Word functionlaity, and some functionality of MS Excel. Other programs from MS Office will be supported in later versions. Also Auto Office Framework is supported in all versions of MS Office since MS Office 2003 (tested), and maybe earlier (not tested). 
 
-= Details =
+== Details ==
 
 Details will be added later.
 
