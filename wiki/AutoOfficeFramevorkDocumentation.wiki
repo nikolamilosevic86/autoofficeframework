@@ -7,6 +7,11 @@
 
 Auto Office Frmaevork is framework for automating functions of MS Office applications. It works via Component Object Model, and via COM interfaces interacts with MS Office Functions. First realease version supports large scale of MS Word functionlaity, and some functionality of MS Excel. Other programs from MS Office will be supported in later versions. Also Auto Office Framework is supported in all versions of MS Office since MS Office 2003 (tested), and maybe earlier (not tested). 
 
+== Motivation ==
+
+Many applications can be extended to create reports, or to use MS Office documents. It can be used for reports, or can be used as templates for creating documents reading some database. There are some frameworks for interaction with MS Office applications but in languages like Java or .NET programming languages. If someone want to interact with MS Office via native C++, there is a problem. To solve that problem is created Auto Office Framework for MFC C++.  
+
+
 == Details ==
 
 Details will be added later.
