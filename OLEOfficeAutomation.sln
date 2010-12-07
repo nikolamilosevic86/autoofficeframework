@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OfficeAutomationPr", "OfficeAutomationPr\OfficeAutomationPr.vcproj", "{FEEBE90E-903C-4052-9D5C-09C650676897}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestApp", "TestApp\TestApp.vcproj", "{9B651AD0-46AB-411C-8F1C-B9785A6D48B0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FEEBE90E-903C-4052-9D5C-09C650676897}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FEEBE90E-903C-4052-9D5C-09C650676897}.Debug|Win32.Build.0 = Debug|Win32
+		{FEEBE90E-903C-4052-9D5C-09C650676897}.Release|Win32.ActiveCfg = Release|Win32
+		{FEEBE90E-903C-4052-9D5C-09C650676897}.Release|Win32.Build.0 = Release|Win32
+		{9B651AD0-46AB-411C-8F1C-B9785A6D48B0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9B651AD0-46AB-411C-8F1C-B9785A6D48B0}.Debug|Win32.Build.0 = Debug|Win32
+		{9B651AD0-46AB-411C-8F1C-B9785A6D48B0}.Release|Win32.ActiveCfg = Release|Win32
+		{9B651AD0-46AB-411C-8F1C-B9785A6D48B0}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
