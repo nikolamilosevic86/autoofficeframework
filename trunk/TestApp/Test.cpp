@@ -9,30 +9,30 @@ using namespace std;
 int main(){
 	char ulaz[30];
 	CMSWord* word=new CMSWord();
-	cout<<"Test program za biblioteku OLEOfficeAutomationPr.lib. Da biste videli komande odkucajte 'help' \n";
+	cout<<"Test application for OLEOfficeAutomationPr.lib. To see help and commands type 'help' \n This test application supports only commands for MS Word \n";
 	while(true){
-		cout<<"Unestite komandu: ";
+		cout<<"Type command: ";
 	cin>>ulaz;
 	//cout<<ulaz;
 	if(!strcmp(ulaz,"help"))
 	{
-		cout<<"open - sluzi za otvaranje dokumenata, zahteva da se unese puna putanja do .doc ili .docx file-a \n";
-		cout<<"close - sluzi za zatvaranje aktivnog dokumenata \n";
-		cout<<"quit - sluzi za zatvaranje word procesa \n";
-		cout<<"delchar - sluzi za brisanje karaktera \n";
-		cout<<"notvisible - sluzi za sakrivanje dokumenta, odnosno aktivan dokument postaje nevidljiv \n";
-		cout<<"visible - sluzi da aktivan dokument postane vidljiv \n";
-		cout<<"exit - Zatvara program \n";
-		cout<<"insertText - Sluzi za dodavanje teksta, tekst se unosi na zahtev programa \n";
-		cout<<"find - Sluzi za trazenje zadatog teksta \n";
-		cout<<"findall - Sluzi za trazenje zadatog teksa i njegovu zamenu drugim zadatim tekstom \n";
-		cout<<"copy - Sluzi kopiranje selektovanog teksta \n";
-		cout<<"paste - Sluzi da se nalepi predhodno kopiran \n";
-		cout<<"insertPicture - Sluzi da se doda slika u dokument. Slika je parametar \n";
-		cout<<"addComment - Sluzi da se doda komentar u dokument. Sadrzaj komentara je parametar \n";
-		cout<<"newDoc - Otvara novi dokument \n";  
-		cout<<"count - Broji aktivne dokumente u procesu pokrenutom iz aplikacije \n";  
-		cout<<"activateById - Aktivira dokument po indexu u listi dokumenata koji sadrzi proces \n";
+		cout<<"open - Opens MS Word document. It is needed to type full path to .doc or .docx file \n";
+		cout<<"close - Closes active document \n";
+		cout<<"quit - Closes MS Word process \n";
+		cout<<"delchar - Deletes one char \n";
+		cout<<"notvisible - Setting active document not to be visible \n";
+		cout<<"visible - Setting active document to be visible \n";
+		cout<<"exit - Exits applications\n";
+		cout<<"insertText - Inserts a text into MS Word active document. The text has to be typed into console when requested \n";
+		cout<<"find - Finds first word that is same as typed \n";
+		cout<<"findall - Same as replace :). Replaces text with other \n";
+		cout<<"copy - Copies selected text into clipboard \n";
+		cout<<"paste - Pastes text from Clipboard to active document \n";
+		cout<<"insertPicture - Inserts a picture. Path of picture is parameter \n";
+		cout<<"addComment - Adds a commnet in baloon. Text of comment is parameter \n";
+		cout<<"newDoc - Creates new document \n";  
+		cout<<"count - Counts all open documents \n";  
+		cout<<"activateById - Activates document by Id from open documents in the process. \nAnd many more. See the code for more.\n";
 
 		
 	}
