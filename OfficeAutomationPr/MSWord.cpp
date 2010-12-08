@@ -1,13 +1,23 @@
-#include "stdafx.h"
+#include "StdAfx.h"
+#include <list>
+#include <stdlib.h>
 #include "MSWord.h"
 #include "OLEMethod.h"
+#include <vector>
+using namespace std;
+
+ 
 
 CMSWord::CMSWord()
 {
 	m_pWApp=NULL;
 	m_pDocuments=NULL;
 	m_pActiveDocument=NULL;
+	Initialize(false);
 }
+
+
+
 
 HRESULT CMSWord::Initialize(bool bVisible)
 {
@@ -20,6 +30,8 @@ HRESULT CMSWord::Initialize(bool bVisible)
 		if(FAILED(m_hr)) m_pWApp=NULL;
 	}
 	{
+
+
 		m_hr=SetVisible(bVisible);
 	}
 	return m_hr;
@@ -78,6 +90,12 @@ HRESULT CMSWord::OpenDocument(LPCTSTR szFilename, bool bVisible)
         VariantInit(&result);
 		m_hr=OLEMethod(DISPATCH_METHOD, &result, m_pDocuments, L"Open", 1, fname);
 		m_pActiveDocument = result.pdispVal;
+	}
+	{
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
+		pDocApp= result.pdispVal;
 	}
 	return m_hr;
 }
@@ -141,6 +159,7 @@ HRESULT CMSWord::NewDocument(bool bVisible)
 	}
 
 	{
+		//Mozda problem?
 		VARIANT result;
 		VariantInit(&result);
 		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, m_pWApp, L"Documents", 0);
@@ -152,6 +171,12 @@ HRESULT CMSWord::NewDocument(bool bVisible)
 		VariantInit(&result);
 		m_hr=OLEMethod(DISPATCH_METHOD, &result, m_pDocuments, L"Add", 0);
 		m_pActiveDocument = result.pdispVal;
+	}
+	{
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
+		pDocApp= result.pdispVal;
 	}
 	return m_hr;
 }
@@ -176,13 +201,13 @@ HRESULT CMSWord::DeleteChar(bool bBack)
 {
 
 	if(m_pWApp==NULL) return E_FAIL;
-	IDispatch *pDocApp;
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
-	}
+	}*/
 	IDispatch *pSelection;
 	{
 		VARIANT result;
@@ -208,19 +233,19 @@ HRESULT CMSWord::DeleteChar(bool bBack)
 HRESULT CMSWord::CheckSpelling(LPCTSTR szWord, bool &bResult)
 {
 	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
-	IDispatch *pDocApp;
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
-	}
+	}*/
 	{
 		VARIANT result;
 		VariantInit(&result);
 		COleVariant varWord(szWord);
 		OLEMethod(DISPATCH_METHOD, &result,pDocApp,L"CheckSpelling",1,varWord.Detach());
-		bResult=result.boolVal;
+		bResult= 0 != result.boolVal;
 	}
 	return m_hr;
 }
@@ -228,19 +253,19 @@ HRESULT CMSWord::CheckSpelling(LPCTSTR szWord, bool &bResult)
 HRESULT CMSWord::CheckGrammer(LPCTSTR szString, bool &bResult)
 {
 	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
-	IDispatch *pDocApp;
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
-	}
+	}*/
 	{
 		VARIANT result;
 		VariantInit(&result);
 		COleVariant varString(szString);
 		OLEMethod(DISPATCH_METHOD, &result,pDocApp,L"CheckGrammar",1,varString.Detach());
-		bResult=result.boolVal;
+		bResult= 0 != result.boolVal;
 	}
 	return m_hr;
 }
@@ -249,13 +274,13 @@ HRESULT CMSWord::CheckGrammer(LPCTSTR szString, bool &bResult)
 HRESULT CMSWord::Copy(){
 
 	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
-	IDispatch *pDocApp;
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
-	}
+	}*/
 	IDispatch *pSelection;
 	{
 		VARIANT result;
@@ -268,7 +293,7 @@ HRESULT CMSWord::Copy(){
 		VariantInit(&result);
 		OLEMethod(DISPATCH_METHOD, &result, pSelection, L"Copy", 0);
 	}
-	pDocApp->Release();
+	//pDocApp->Release();
 	pSelection->Release();
 	return m_hr;
 
@@ -277,13 +302,13 @@ HRESULT CMSWord::Copy(){
 HRESULT CMSWord::Paste(){
 
 	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
-	IDispatch *pDocApp;
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
-	}
+	}*/
 	IDispatch *pSelection;
 	{
 		VARIANT result;
@@ -299,22 +324,128 @@ HRESULT CMSWord::Paste(){
 		VariantInit(&result);
 		OLEMethod(DISPATCH_METHOD, &result, pSelection, L"PasteAndFormat", 1,wdPasteDefault);
 	}
-	pDocApp->Release();
+	//pDocApp->Release();
 	pSelection->Release();
 	return m_hr;
 
 }
 
-HRESULT CMSWord::InserPicture(LPCTSTR szFilename)
+HRESULT CMSWord::SetBold(bool bBold)
 {
 	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
-	IDispatch *pDocApp;
+	/*IDispatch *pDocApp;
+	{  
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
+		pDocApp= result.pdispVal;
+	}*/
+	IDispatch *pSelection;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
+		pSelection=result.pdispVal;
+	}
+	IDispatch *pFont;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pSelection, L"Font", 0);
+		pFont=result.pdispVal;
+	}
+	{
+		VARIANT x;
+		x.vt = VT_I4;
+		if(bBold==true)
+			x.lVal=1;
+		else x.lVal=0;
+		m_hr=OLEMethod(DISPATCH_PROPERTYPUT, NULL, pFont, L"Bold", 1, x);
+
+}
+	return m_hr;
+}
+
+
+HRESULT CMSWord::SetItalic(bool bItalic)
+{
+	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
+	}*/
+	IDispatch *pSelection;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
+		pSelection=result.pdispVal;
 	}
+	IDispatch *pFont;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, pSelection, L"Font", 0);
+		pFont=result.pdispVal;
+	}
+	{
+		VARIANT x;
+		x.vt = VT_I4;
+		x.lVal = bItalic?1:0;
+		m_hr=OLEMethod(DISPATCH_PROPERTYPUT, NULL, pFont, L"Italic", 1, x);
+
+}
+	return m_hr;
+}
+
+HRESULT CMSWord::SetUnderline(bool bUnderline)
+{
+	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
+	/*IDispatch *pDocApp;
+	{  
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
+		pDocApp= result.pdispVal;
+	}*/
+	IDispatch *pSelection;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
+		pSelection=result.pdispVal;
+	}
+	IDispatch *pFont;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, pSelection, L"Font", 0);
+		pFont=result.pdispVal;
+	}
+	{
+		VARIANT x;
+		x.vt = VT_I4;
+		x.lVal = bUnderline?1:0;
+		m_hr=OLEMethod(DISPATCH_PROPERTYPUT, NULL, pFont, L"Underline", 1, x);
+
+}
+	return m_hr;
+}
+
+
+HRESULT CMSWord::InserPicture(LPCTSTR szFilename)
+{
+	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
+	/*IDispatch *pDocApp;
+	{  
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
+		pDocApp= result.pdispVal;
+	}*/
 	IDispatch *pSelection;
 	{
 		VARIANT result;
@@ -338,16 +469,43 @@ HRESULT CMSWord::InserPicture(LPCTSTR szFilename)
 	return m_hr;
 }
 
-HRESULT CMSWord::InserText(LPCTSTR szText)
+HRESULT CMSWord::InsertFile(LPCTSTR szFilename)
 {
 	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
-	IDispatch *pDocApp;
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
+	}*/
+	IDispatch *pSelection;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
+		pSelection=result.pdispVal;
 	}
+	
+	{
+		COleVariant varText(szFilename);
+		OLEMethod(DISPATCH_METHOD,NULL,pSelection,L"InsertFile",1,varText.Detach());
+	}
+	//pDocApp->Release();
+	pSelection->Release();
+	return m_hr;
+}
+
+HRESULT CMSWord::InserText(LPCTSTR szText)
+{
+	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
+	/*IDispatch *pDocApp;
+	{  
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
+		pDocApp= result.pdispVal;
+	}*/
 	IDispatch *pSelection;
 	{
 		VARIANT result;
@@ -360,7 +518,7 @@ HRESULT CMSWord::InserText(LPCTSTR szText)
 		COleVariant varText(szText);
 		OLEMethod(DISPATCH_METHOD,NULL,pSelection,L"TypeText",1,varText.Detach());
 	}
-	pDocApp->Release();
+	//pDocApp->Release();
 	pSelection->Release();
 	return m_hr;
 }
@@ -368,13 +526,13 @@ HRESULT CMSWord::InserText(LPCTSTR szText)
 HRESULT CMSWord::SetFont(LPCTSTR szFontName, int nSize, bool bBold, bool bItalic,COLORREF crColor)
 {
 	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
-	IDispatch *pDocApp;
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
-	}
+	}*/
 	IDispatch *pSelection;
 	{
 		VARIANT result;
@@ -405,20 +563,90 @@ HRESULT CMSWord::SetFont(LPCTSTR szFontName, int nSize, bool bBold, bool bItalic
 	}
 	pFont->Release();
 	pSelection->Release();
-	pDocApp->Release();
+	//pDocApp->Release();
 	return m_hr;
+}
+
+CString CMSWord::GetString(int nlenght){
+	int i=0;
+	HRESULT hr;
+	while(i<nlenght){
+	hr=MoveCursor(2,true);
+	i++;
+	}
+	if(!m_pWApp || !m_pActiveDocument) return L"E_FAIL";
+	
+	/*IDispatch *pDocApp;
+	{  
+		VARIANT result;
+		VariantInit(&result);
+		hr=OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
+		pDocApp= result.pdispVal;
+	}*/
+	IDispatch *pSelection;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
+		pSelection=result.pdispVal;
+	}
+	BSTR pText;
+	{
+	VARIANT result;
+	VariantInit(&result);
+	hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pSelection, L"Text", 0);
+	pText=result.bstrVal;
+	}
+
+	
+	CString s(pText);
+	return s;	
+	
+}
+
+CString CMSWord::GetSelectedString(){
+	//int i=0;
+	HRESULT hr;
+	if(!m_pWApp || !m_pActiveDocument) return L"E_FAIL";
+	
+	/*IDispatch *pDocApp;
+	{  
+		VARIANT result;
+		VariantInit(&result);
+		hr=OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
+		pDocApp= result.pdispVal;
+	}*/
+	IDispatch *pSelection;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
+		pSelection=result.pdispVal;
+	}
+	BSTR pText;
+	{
+	VARIANT result;
+	VariantInit(&result);
+	hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pSelection, L"Text", 0);
+	pText=result.bstrVal;
+	}
+
+	
+	CString s(pText);
+	return s;	
+
 }
 
 HRESULT CMSWord::MoveCursor(int nDirection,bool bSelection)
 {
 	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
-	IDispatch *pDocApp;
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
-	}
+	}*/
 	IDispatch *pSelection;
 	{
 		VARIANT result;
@@ -453,7 +681,7 @@ HRESULT CMSWord::MoveCursor(int nDirection,bool bSelection)
 				break;
 		}
 	}
-	pDocApp->Release();
+	//pDocApp->Release();
 	pSelection->Release();
 	return m_hr;
 }
@@ -461,13 +689,13 @@ HRESULT CMSWord::MoveCursor(int nDirection,bool bSelection)
 HRESULT CMSWord::AddComment(LPCTSTR szComment)
 {
 	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
-	IDispatch *pDocApp;
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
-	}
+	}*/
 	IDispatch *pSelection;
 	{
 		VARIANT result;
@@ -500,7 +728,7 @@ HRESULT CMSWord::AddComment(LPCTSTR szComment)
 	}
 	pRange->Release();
 	pComments->Release();
-	pDocApp->Release();
+	//pDocApp->Release();
 	pSelection->Release();
 	return m_hr;
 }
@@ -508,13 +736,13 @@ HRESULT CMSWord::AddComment(LPCTSTR szComment)
 HRESULT CMSWord::FindFirst(LPCTSTR szText)
 {
 	if(m_pWApp==NULL) return E_FAIL;
-	IDispatch *pDocApp;
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
-	}
+	}*/
 	IDispatch *pSelection;
 	{
 		VARIANT result;
@@ -575,7 +803,7 @@ HRESULT CMSWord::FindFirst(LPCTSTR szText)
 
 		
 	}
-	pDocApp->Release();
+	//pDocApp->Release();
 	pSelection->Release();
 	pReplacement->Release();
 	pFind->Release();
@@ -586,14 +814,14 @@ HRESULT CMSWord::FindFirst(LPCTSTR szText)
 bool CMSWord::FindFirstBool(LPCTSTR szText)
 {
 	bool retur;
-	if(m_pWApp==NULL) return E_FAIL;
-	IDispatch *pDocApp;
+	if(m_pWApp==NULL) return bool(E_FAIL);
+	/*IDispatch *pDocApp;
 	{  
 		VARIANT result;
 		VariantInit(&result);
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
-	}
+	}*/
 	IDispatch *pSelection;
 	{
 		VARIANT result;
@@ -656,7 +884,7 @@ bool CMSWord::FindFirstBool(LPCTSTR szText)
 
 		
 	}
-	pDocApp->Release();
+	//pDocApp->Release();
 	pSelection->Release();
 	pReplacement->Release();
 	pFind->Release();
@@ -664,127 +892,7 @@ bool CMSWord::FindFirstBool(LPCTSTR szText)
 }
 
 
-HRESULT CMSWord::Replace(LPCTSTR szText,LPCTSTR szReplacementText,bool ReplaceAll)
-{
-	if(m_pWApp==NULL) return E_FAIL;
-	IDispatch *pDocApp;
-	{  
-		VARIANT result;
-		VariantInit(&result);
-		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
-		pDocApp= result.pdispVal;
-	}
-	IDispatch *pSelection;
-	{
-		VARIANT result;
-		VariantInit(&result);
-		OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
-		pSelection=result.pdispVal;
-	}
-	IDispatch *pFind;
-	{
-		VARIANT result;
-		VariantInit(&result);
-		OLEMethod(DISPATCH_PROPERTYGET, &result, pSelection, L"Find", 0);
-		pFind=result.pdispVal;
 
-	}
-	{
-	OLEMethod(DISPATCH_METHOD, NULL, pFind, L"ClearFormatting", 0);
-	}
-	IDispatch *pReplacement;
-	{
-		VARIANT result;
-		VariantInit(&result);
-		OLEMethod(DISPATCH_PROPERTYGET, &result, pFind, L"Replacement", 0);
-		pReplacement=result.pdispVal;
-
-	}
-	OLEMethod(DISPATCH_METHOD, NULL, pReplacement, L"ClearFormatting", 0);
-
-	{
-		COleVariant varText(szText);
-		OLEMethod(DISPATCH_PROPERTYPUT,NULL,pFind,L"Text",1,varText.Detach());
-		//char* txt="";
-		//CString str(txt);
-		//LPCTSTR lpStr = (LPCTSTR)str;
-		COleVariant varReplacement(szReplacementText);
-		OLEMethod(DISPATCH_PROPERTYPUT,NULL,pReplacement,L"Text",1,varReplacement.Detach());
-		COleVariant varForward((BYTE)1);
-		OLEMethod(DISPATCH_PROPERTYPUT,NULL,pFind,L"Forward",1,varForward.Detach());
-		VARIANT wdFindContinue;
-		wdFindContinue.vt =VT_I4;
-		wdFindContinue.lVal =1;
-		OLEMethod(DISPATCH_PROPERTYPUT,NULL,pFind,L"Wrap",1,wdFindContinue);
-		COleVariant varFormat((BYTE)0);
-		OLEMethod(DISPATCH_PROPERTYPUT,NULL,pFind,L"Format",1,varFormat.Detach());
-		COleVariant varMatchCase((BYTE)0);
-		OLEMethod(DISPATCH_PROPERTYPUT,NULL,pFind,L"MatchCase",1,varMatchCase.Detach());
-		COleVariant varMatchWholeWord((BYTE)0);
-		OLEMethod(DISPATCH_PROPERTYPUT,NULL,pFind,L"MatchWholeWord",1,varMatchWholeWord.Detach());
-		COleVariant varMatchWildcards((BYTE)0);
-		OLEMethod(DISPATCH_PROPERTYPUT,NULL,pFind,L"MatchWildcards",1,varMatchWildcards.Detach());
-		COleVariant varMatchSoundsLike((BYTE)0);
-		OLEMethod(DISPATCH_PROPERTYPUT,NULL,pFind,L"MatchSoundsLike",1,varMatchSoundsLike.Detach());
-		COleVariant varMatchAllWordForms((BYTE)0);
-		OLEMethod(DISPATCH_PROPERTYPUT,NULL,pFind,L"MatchAllWordForms",1,varMatchAllWordForms.Detach());
-		VARIANT wdReplaceAll;
-		COleVariant r1((BYTE)0);
-		COleVariant r2((BYTE)1);
-		COleVariant r3((BYTE)1);
-		COleVariant r4((BYTE)1);
-		
-		if(ReplaceAll){
-		
-		wdReplaceAll.vt =VT_I4;
-		wdReplaceAll.lVal =2;
-		//OLEMethod(DISPATCH_PROPERTYPUT,NULL,pFind,L"Replace",1,wdReplaceAll);
-		}else{
-		
-		wdReplaceAll.vt =VT_I4;
-		wdReplaceAll.lVal =1;
-		//OLEMethod(DISPATCH_PROPERTYPUT,NULL,pFind,L"Replace",1,wdReplaceOne);
-		}
-		
-		OLEMethod(DISPATCH_METHOD,NULL,pFind,L"Execute",0);
-		
-	}
-	pDocApp->Release();
-	pSelection->Release();
-	pReplacement->Release();
-	pFind->Release();
-	return m_hr;
-}
-
-/*
-HRESULT CMSWord::SetSelectionText(LPCTSTR szText)
-{
-	if(m_pWApp==NULL) return E_FAIL;
-	IDispatch *pDocApp;
-	{  
-		VARIANT result;
-		VariantInit(&result);
-		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
-		pDocApp= result.pdispVal;
-	}
-	IDispatch *pSelection;
-	{
-		VARIANT result;
-		VariantInit(&result);
-		OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
-		pSelection=result.pdispVal;
-	}
-
-	{
-		COleVariant sTxt(szText);
-		VARIANT text=sTxt.Detach();
-		OLEMethod(DISPATCH_METHOD, NULL, pSelection, L"TypeText", 1,text);
-
-	}
-	pDocApp->Release();
-	pSelection->Release();
-	return m_hr;
-}*/
 
 // bSave=true will autosave the document. bSave=false will close document without saving.
 HRESULT CMSWord::CloseActiveDocument(bool bSave)
@@ -828,3 +936,53 @@ CMSWord::~CMSWord()
 	CoUninitialize();
 }
 
+
+
+
+
+//Ova metoda nece pisati u write protected particije (Obicno C particija na nekim windows OS)
+HRESULT CMSWord::SaveFile(LPCTSTR czFileName){
+	HRESULT hr;
+	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
+	/*IDispatch *pDocApp;
+	{  
+		VARIANT result;
+		VariantInit(&result);
+		hr=OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
+		pDocApp= result.pdispVal;
+	}*/
+	IDispatch *pActiveDocument;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		hr=OLEMethod(DISPATCH_PROPERTYGET, &result, m_pWApp, L"ActiveDocument", 0);
+		pActiveDocument=result.pdispVal;
+	}
+	{
+		VARIANT result;
+		VariantInit(&result);
+		COleVariant FileName(czFileName);
+		COleVariant FileFormat;
+		FileFormat.lVal=12;
+		FileFormat.vt =VT_I4;
+		COleVariant LockComments((BYTE)0);
+		COleVariant Password(L"");
+		COleVariant AddToRecentFiles((BYTE)1);
+		
+		COleVariant WritePassword(L"");
+		COleVariant ReadOnlyRecommended((BYTE)0);
+		COleVariant EmbedTrueTypeFonts((BYTE)0);
+		COleVariant SaveNativePictureFormat((BYTE)0);
+		COleVariant SaveFormsData((BYTE)0);
+		COleVariant SaveAsAOCELetter((BYTE)0);
+
+		
+		hr=OLEMethod(DISPATCH_METHOD, &result, pActiveDocument, L"SaveAs", 1,FileName);//,FileFormat,LockComments,Password,AddToRecentFiles,WritePassword,ReadOnlyRecommended,EmbedTrueTypeFonts,SaveNativePictureFormat,SaveFormsData,SaveAsAOCELetter);
+	}
+	m_pWApp->Release();
+	pActiveDocument->Release();
+	return m_hr;
+
+	
+
+}
