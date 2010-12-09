@@ -16,7 +16,7 @@ Many applications can be extended to create reports, or to use MS Office documen
 
 The library contains classes for each office applications that are able to ineract with that MS Office component. In first (0.1) version of Auto Office Framework there are just two, CMSWord and CMSExcel classes. CMSWord class is used to interact with MS Office Word application. *This is the class interface that can be used:*
 
-
+[code]
 class CMSWord
 {
 protected:
@@ -89,6 +89,7 @@ public:
         HRESULT SaveFile(LPCTSTR czFileName);
 
 };
+[/code]
 
 *Interface of CMSExcel class is:*
 
