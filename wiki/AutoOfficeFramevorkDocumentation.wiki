@@ -128,14 +128,11 @@ public:
         HRESULT SetActiveCellText(LPCTSTR szText);
         HRESULT Quit();
 };
+//This class will be commented soon
+
 }}}
 Also all of this methods from classes uses OLEMethod function. This is the function that uses COM to gain access to some remote objects and to invoke methods or to get or set some property. Coding in COM requires a lot of code, and this function enables to reuse the great amount of that code.
 
-Details will be added later.
+==Code samples==
 
-
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Code samples will be added later.
