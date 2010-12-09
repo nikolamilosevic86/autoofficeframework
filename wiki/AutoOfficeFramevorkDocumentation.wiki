@@ -16,7 +16,7 @@ Many applications can be extended to create reports, or to use MS Office documen
 
 The library contains classes for each office applications that are able to ineract with that MS Office component. In first (0.1) version of Auto Office Framework there are just two, CMSWord and CMSExcel classes. CMSWord class is used to interact with MS Office Word application. *This is the class interface that can be used:*
 
-[code]
+{{{
 class CMSWord
 {
 protected:
@@ -89,10 +89,10 @@ public:
         HRESULT SaveFile(LPCTSTR czFileName);
 
 };
-[/code]
+}}}
 
 *Interface of CMSExcel class is:*
-
+{{{
 class CMSExcel
 {
 protected:
@@ -128,7 +128,7 @@ public:
         HRESULT SetActiveCellText(LPCTSTR szText);
         HRESULT Quit();
 };
-
+}}}
 Also all of this methods from classes uses OLEMethod function. This is the function that uses COM to gain access to some remote objects and to invoke methods or to get or set some property. Coding in COM requires a lot of code, and this function enables to reuse the great amount of that code.
 
 Details will be added later.
