@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary This page explains and sets the guidelines for this project.
 #labels Phase-Implementation
 
 = Programmers guidlines =
