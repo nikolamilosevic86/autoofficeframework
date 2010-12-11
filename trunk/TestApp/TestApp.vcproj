@@ -64,7 +64,7 @@
 				AdditionalOptions="/link &quot;OfficeAutomationPr.lib&quot;&#x0D;&#x0A;"
 				AdditionalDependencies="&quot;C:\Users\Nikola\Documents\Visual Studio 2008\Projects\OLEOfficeAutomation\TestApp\OfficeAutomationPr.lib&quot;"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;C:\Users\Nikola\Documents\Visual Studio 2008\Projects\OLEOfficeAutomation\TestApp&quot;"
+				AdditionalLibraryDirectories="$(OutDir)\"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -190,10 +190,6 @@
 			>
 			<File
 				RelativePath=".\MSExcel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MSWord.h"
 				>
 			</File>
 			<File
