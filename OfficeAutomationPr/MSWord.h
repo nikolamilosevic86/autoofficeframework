@@ -4,15 +4,6 @@
 #include <vector>
 using namespace std;
 
-struct Marker{
-CString name;
-int cnt;
-bool mix;
-Marker(){
-cnt=0;
-mix=false;
-}
-};
 
 class CMSWord
 {
@@ -84,5 +75,11 @@ public:
 	CString GetSelectedString();
 	//Saves file
 	HRESULT SaveFile(LPCTSTR czFileName);
+	HRESULT AlignJustify();
+	HRESULT AlignLeft();
+	HRESULT AlignRight();
+	HRESULT AlignCenter();
+
+
 
 };

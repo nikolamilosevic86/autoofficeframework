@@ -62,6 +62,18 @@ int main(){
 	if(!strcmp(ulaz,"visible")){
 		word->SetVisible(true);
 	}
+	if(!strcmp(ulaz,"AlignLeft")){
+		word->AlignLeft();
+	}
+	if(!strcmp(ulaz,"AlignRight")){
+		word->AlignRight();
+	}
+	if(!strcmp(ulaz,"AlignCenter")){
+		word->AlignCenter();
+	}
+	if(!strcmp(ulaz,"AlignJustify")){
+		word->AlignJustify();
+	}
 	if(!strcmp(ulaz,"exit")){
 		exit(1);
 	}

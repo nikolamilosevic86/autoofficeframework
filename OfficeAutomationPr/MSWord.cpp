@@ -97,6 +97,7 @@ HRESULT CMSWord::OpenDocument(LPCTSTR szFilename, bool bVisible)
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
 	}
+	this->SetVisible(bVisible);
 	return m_hr;
 }
 
@@ -178,6 +179,7 @@ HRESULT CMSWord::NewDocument(bool bVisible)
 		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
 		pDocApp= result.pdispVal;
 	}
+	this->SetVisible(bVisible);
 	return m_hr;
 }
 
@@ -944,13 +946,7 @@ CMSWord::~CMSWord()
 HRESULT CMSWord::SaveFile(LPCTSTR czFileName){
 	HRESULT hr;
 	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
-	/*IDispatch *pDocApp;
-	{  
-		VARIANT result;
-		VariantInit(&result);
-		hr=OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
-		pDocApp= result.pdispVal;
-	}*/
+	
 	IDispatch *pActiveDocument;
 	{
 		VARIANT result;
@@ -985,4 +981,113 @@ HRESULT CMSWord::SaveFile(LPCTSTR czFileName){
 
 	
 
+}
+HRESULT CMSWord::AlignCenter()
+{
+if(m_pWApp==NULL) return bool(E_FAIL);
+	
+	IDispatch *pSelection;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
+		pSelection=result.pdispVal;
+	}
+	IDispatch *pParagraphFormat;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pSelection, L"ParagraphFormat", 0);
+		pParagraphFormat=result.pdispVal;
+	}
+	{
+		VARIANT wdAlignCenter;
+		wdAlignCenter.vt =VT_I4;
+		wdAlignCenter.lVal =1;
+		m_hr=OLEMethod(DISPATCH_PROPERTYPUT, NULL, pParagraphFormat, L"Alignment", 1, wdAlignCenter);
+	}
+	return m_hr;
+}
+HRESULT CMSWord::AlignJustify()
+{
+if(m_pWApp==NULL) return bool(E_FAIL);
+	
+	IDispatch *pSelection;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
+		pSelection=result.pdispVal;
+	}
+	IDispatch *pParagraphFormat;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pSelection, L"ParagraphFormat", 0);
+		pParagraphFormat=result.pdispVal;
+	}
+	{
+		VARIANT wdAlignJustify;
+		wdAlignJustify.vt =VT_I4;
+		wdAlignJustify.lVal =3;
+		
+		m_hr=OLEMethod(DISPATCH_PROPERTYPUT, NULL, pParagraphFormat, L"Alignment", 1, wdAlignJustify);
+	}
+	return m_hr;
+}
+HRESULT CMSWord::AlignRight()
+{
+	if(m_pWApp==NULL) return bool(E_FAIL);
+	
+	IDispatch *pSelection;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
+		pSelection=result.pdispVal;
+	}
+	IDispatch *pParagraphFormat;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pSelection, L"ParagraphFormat", 0);
+		pParagraphFormat=result.pdispVal;
+	}
+	{
+		VARIANT wdAlignRight;
+		wdAlignRight.vt =VT_I4;
+		wdAlignRight.lVal =2;
+		
+		m_hr=OLEMethod(DISPATCH_PROPERTYPUT, NULL, pParagraphFormat, L"Alignment", 1, wdAlignRight);
+	}
+	return m_hr;
+}
+
+HRESULT CMSWord::AlignLeft()
+{
+	
+	if(m_pWApp==NULL) return bool(E_FAIL);
+	
+	IDispatch *pSelection;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
+		pSelection=result.pdispVal;
+	}
+	IDispatch *pParagraphFormat;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, pSelection, L"ParagraphFormat", 0);
+		pParagraphFormat=result.pdispVal;
+	}
+	{
+		VARIANT wdAlignLeft;
+		wdAlignLeft.vt =VT_I4;
+		wdAlignLeft.lVal =0;
+		
+		m_hr=OLEMethod(DISPATCH_PROPERTYPUT, NULL, pParagraphFormat, L"Alignment", 1, wdAlignLeft);
+	}
+	return m_hr;
 }
