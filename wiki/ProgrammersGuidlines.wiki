@@ -1,5 +1,5 @@
 #summary This page explains and sets the guidelines for this project.
-#labels Phase-Implementation
+#labels Phase-Implementation,Featured
 
 = Programmers guidlines =
 
