@@ -1,4 +1,4 @@
-#summary Documentation on lybrary funcions and classes.
+#summary Documentation on library funcions and classes.
 #labels Featured,Phase-Design,Phase-Implementation
 
 = Auto Office Library=
