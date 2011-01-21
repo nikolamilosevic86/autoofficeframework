@@ -73,11 +73,15 @@ public:
 	CString GetString(int nlenght);
 	//Get selected string
 	CString GetSelectedString();
-	//Saves file
+	//Saves file in path given by parameter
 	HRESULT SaveFile(LPCTSTR czFileName);
+	//sets Align Justify
 	HRESULT AlignJustify();
+	//sets Align Left
 	HRESULT AlignLeft();
+	//sets Align Right
 	HRESULT AlignRight();
+	//sets Align Center
 	HRESULT AlignCenter();
 
 
