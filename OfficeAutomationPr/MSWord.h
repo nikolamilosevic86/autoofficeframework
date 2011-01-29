@@ -83,6 +83,10 @@ public:
 	HRESULT AlignRight();
 	//sets Align Center
 	HRESULT AlignCenter();
+	//Creates document from Template
+	HRESULT AddDoc(LPCTSTR templateName);
+	//Selects all content from document
+	HRESULT SelectAll();
 
 
 

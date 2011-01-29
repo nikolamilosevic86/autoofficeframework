@@ -1091,3 +1091,59 @@ HRESULT CMSWord::AlignLeft()
 	}
 	return m_hr;
 }
+
+
+HRESULT CMSWord::AddDoc(LPCTSTR templateName){
+
+	if(m_pWApp==NULL) 
+	{
+		if(FAILED(m_hr=Initialize(false)))
+			return m_hr;
+	}
+
+	{
+		//Mozda problem?
+		VARIANT result;
+		VariantInit(&result);
+		m_hr=OLEMethod(DISPATCH_PROPERTYGET, &result, m_pWApp, L"Documents", 0);
+		m_pDocuments = result.pdispVal;
+	}	
+
+	{
+		VARIANT result;
+		VariantInit(&result);
+		COleVariant FileName(templateName);
+
+		m_hr=OLEMethod(DISPATCH_METHOD, &result, m_pDocuments, L"Add", 1,FileName);
+		m_pActiveDocument = result.pdispVal;
+	}
+	{
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, m_pActiveDocument, L"Application", 0);
+		pDocApp= result.pdispVal;
+	}
+	return m_hr;
+
+}
+
+HRESULT CMSWord::SelectAll()
+{
+	if(!m_pWApp || !m_pActiveDocument) return E_FAIL;
+	
+	IDispatch *pSelection;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		OLEMethod(DISPATCH_PROPERTYGET, &result, pDocApp, L"Selection", 0);
+		pSelection=result.pdispVal;
+	}
+
+	{
+				m_hr=OLEMethod(DISPATCH_METHOD, NULL, pSelection, L"WholeStory", 0);
+			
+	}
+
+	pSelection->Release();
+	return m_hr;
+}
