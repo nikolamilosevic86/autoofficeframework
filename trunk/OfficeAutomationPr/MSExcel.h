@@ -34,7 +34,7 @@ public:
 	HRESULT SetExcelCellFormat(LPCTSTR szRange, LPCTSTR szFormat);
 	//Sets name of Sheet
 	HRESULT SetExcelSheetName(int nSheetNo, LPCTSTR szSheetName);
-	//Gets value from selected cell
+	//Gets value
 	HRESULT GetExcelValue(LPCTSTR szCell, CString &sValue);
 	//Sets background colour
 	HRESULT SetExcelBackgroundColor(LPCTSTR szRange, COLORREF crColor, int nPattern);
@@ -44,7 +44,7 @@ public:
 	HRESULT SetExcelValue(LPCTSTR szRange,LPCTSTR szValue,bool bAutoFit, int nAlignment);
 	//Sets border stile
 	HRESULT SetExcelBorder(LPCTSTR szRange, int nStyle);
-	//Merges cells of range. Write Range as 
+	//Merges cells of range. Write Range as "$I$2:$P$20" or "I2:P20"
 	HRESULT MergeExcelCells(LPCTSTR szRange);
 	//Auto fit Excel column
 	HRESULT AutoFitExcelColumn(LPCTSTR szColumn);

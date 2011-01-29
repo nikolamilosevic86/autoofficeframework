@@ -38,6 +38,26 @@ int main(){
 
 		
 	}
+	if(!strcmp(ulaz,"newexcel")){
+		excel->NewExcelBook();
+	}
+	if(!strcmp(ulaz,"activeol")){
+	int x,y;
+	excel->GetActiveCell(x,y);
+	cout<<"x:";
+	cout<<x;
+	cout<<", y:";
+	cout<<y;
+	cout<<"\n";
+	}
+
+	if(!strcmp(ulaz,"GetExcelValue")){
+		CString val;
+		CString range("A1");
+		excel->GetExcelValue(range,val);
+		cout<<val<<"\n";
+	}
+
 	if(!strcmp(ulaz,"open"))
 	{
 	char dokument[150];
@@ -122,15 +142,7 @@ int main(){
 	if(!strcmp(ulaz,"newDoc")){
 	word->NewDocument(true);
 	}
-	/*if(!strcmp(ulaz,"replace")){
-	char* txt="Word";
-	CString str(txt);  
-	LPCTSTR lpStr = (LPCTSTR)str;  
-	char* rpl="Excel";
-	CString rstr(rpl);
-	LPCTSTR lprepl=(LPCTSTR)rstr;
-    word->Replace(lpStr,lprepl,true);   
-  } */
+
 	HRESULT hr;
 	//Treba ga prebaciti umesto replace all, koji ne radi kako treba zbog argumenta
 	if(!strcmp(ulaz,"findall")){
