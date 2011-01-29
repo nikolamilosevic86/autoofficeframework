@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MSWord.h"
+#include "MSExcel.h"
 #include <windows.h>
 #include <iostream>
 using namespace std;
@@ -9,6 +10,7 @@ using namespace std;
 int main(){
 	char ulaz[30];
 	CMSWord* word=new CMSWord();
+	CMSExcel* excel=new CMSExcel();
 	cout<<"Test application for OLEOfficeAutomationPr.lib. To see help and commands type 'help' \n This test application supports only commands for MS Word \n";
 	while(true){
 		cout<<"Type command: ";
